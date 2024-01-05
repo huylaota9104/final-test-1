@@ -6,8 +6,10 @@ import App from "./App";
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
+const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
 root.render(
   <BrowserRouter>
-    <App />
+    <App storedTasks={storedTasks} />
   </BrowserRouter>
 );
