@@ -1,9 +1,10 @@
-
+import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect } from "react";
 import { FaRegCircle, FaRegCheckCircle } from "react-icons/fa";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 const TodoList = ({ storedTasks }) => {
+  const { t } = useTranslation();
   const [showOnlyUnfinished, setShowOnlyUnfinished] = useState(false);
   const [tasks, setTasks] = useState(storedTasks);
   const [currentLanguage, setCurrentLanguage] = useState("en");
@@ -53,6 +54,7 @@ const TodoList = ({ storedTasks }) => {
             ref={provided.innerRef}
             className="todo-list-container"
           >
+              <button onClick={toggleLanguage}>{t('toggleLanguage')}</button>
             {tasks
               .filter((task) => (showOnlyUnfinished ? !task.done : true))
               .map((task, index) => (
@@ -64,7 +66,25 @@ const TodoList = ({ storedTasks }) => {
                       {...provided.dragHandleProps}
                       className={`todo-item-container ${task.done ? "done" : ""}`}
                     >
-                      {/* rest of your component JSX */}
+                     {task.done ? (
+              <FaRegCheckCircle
+                className="item-done-button"
+                color="#9a9a9a"
+                onClick={() => toggleTaskStatus(task.id)}
+              />
+            ) : (
+              <FaRegCircle
+                className="item-done-button"
+                color="#9a9a9a"
+                onClick={() => toggleTaskStatus(task.id)}
+              />
+            )}
+            <div className="item-title">{task.title}</div>
+            {task.dueDate && (
+              <div className="item-due-date">
+                {t('dueIn')} {calculateDaysUntilDue(task.dueDate)} {t('days')}
+              </div>
+            )}
                     </div>
                   )}
                 </Draggable>
